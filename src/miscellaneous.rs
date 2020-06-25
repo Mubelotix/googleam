@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use wasm_bindgen::{prelude::*, JsCast};
+use wasm_bindgen::prelude::*;
 
 #[derive(Deserialize)]
 pub struct Giveaway {

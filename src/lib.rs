@@ -1,11 +1,11 @@
 #![recursion_limit="256"]
 
 use yew::prelude::*;
-use wasm_bindgen::{prelude::*, JsCast};
-use yew::services::{FetchService, ConsoleService};
-use yew::format::{Json, Nothing};
+use wasm_bindgen::prelude::*;
+use yew::services::FetchService;
+use yew::format::Nothing;
 use yew::services::fetch::{Request, Response, FetchTask};
-use serde_json::{from_str, Value};
+use serde_json::{from_str};
 use anyhow::Error;
 use std::rc::Rc;
 use std::cell::RefCell;
@@ -17,7 +17,6 @@ use crate::miscellaneous::*;
 struct Model {
     link: ComponentLink<Self>,
     fetch_service: FetchService,
-    console_service: ConsoleService,
     results: Rc<RefCell<Vec<Giveaway>>>,
     tasks: Vec<FetchTask>
 }
@@ -25,7 +24,6 @@ struct Model {
 enum Msg {
     Input(String),
     ResultsOk,
-    Enter(),
     Error
 }
 
@@ -37,7 +35,6 @@ impl Component for Model {
         Self {
             link,
             fetch_service: FetchService::new(),
-            console_service: ConsoleService::new(),
             results: Rc::new(RefCell::new(Vec::new())),
             tasks: Vec::new()
         }
@@ -74,39 +71,6 @@ impl Component for Model {
                 self.tasks.push(task.unwrap());
             }
             Msg::ResultsOk => (),
-            Msg::Enter() => {
-                /*self.console_service.log("Entering");
-                let mut fetch = FetchService::new();
-
-                let request = Request::get("https://gleam.io/gQeRO/animal-crossing-new-horizons-nintendo-switch-giveaway")
-                    .body(Nothing)
-                    .expect("Failed to build request");
-
-                let task = fetch.fetch_with_options(
-                    request,
-                    yew::services::fetch::FetchOptions{
-                        cache: None,
-                        credentials: None,
-                        redirect: None,
-                        mode: Some(yew::services::fetch::Mode::Cors),
-                        referrer: None,
-                        referrer_policy: None,
-                        integrity: None,
-                    },
-                    self.link.callback(move |response: Response<Result<String, Error>>| {
-                        let mut console = ConsoleService::new();
-                        if response.status().is_success() {
-                            console.log("success");
-                            console.log(&format!("{:?}", response.headers()));
-                            Msg::ResultsOk
-                        } else {
-                            Msg::Error
-                        }
-                    }),
-                );
-                self.tasks.push(task.unwrap());*/
-                //https://gleam.io/gQeRO/animal-crossing-new-horizons-nintendo-switch-giveaway
-            }
             _ => ()
 
         }
@@ -144,7 +108,7 @@ impl Component for Model {
 
         html! {
             <main>
-                <div id="results">{ for results }/*<button onclick=self.link.callback(|_| Msg::Enter())>{"Enter"}</button>*/</div>
+                <div id="results">{ for results }</div>
                 <form autocomplete="off">
                     <input type="text" name="q" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
                     <h1>{"Googleam"}</h1>
