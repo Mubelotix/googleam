@@ -25,6 +25,7 @@ struct Model {
 enum Msg {
     Input(String),
     ResultsOk,
+    Enter(),
     Error
 }
 
@@ -46,10 +47,15 @@ impl Component for Model {
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
             Msg::Input(query) => {
+                #[cfg(debug_assertions)]
                 let request = Request::get(format!("http://localhost:7700/indexes/giveaways/search?q={}", encode(&query)))
-                    .header("X-Meili-API-Key", "321fde49d647cb8dd3ce20f75fb3b3afcd10be5995d560d4d8151abaa57e1580")
                     .body(Nothing)
                     .expect("Failed to build request.");
+                #[cfg(not(debug_assertions))]
+                let request = Request::get(format!("https://googleam.mubelotix.dev/indexes/giveaways/search?q={}", encode(&query)))
+                    .header("X-Meili-API-Key", "321fde49d647cb8dd3ce20f75fb3b3afcd10be5995d560d4d8151abaa57e1580")
+                    .body(Nothing)
+                    .expect("Failed to build request");
 
                 let results2 = Rc::clone(&self.results);
                 let task = self.fetch_service.fetch(
@@ -68,6 +74,39 @@ impl Component for Model {
                 self.tasks.push(task.unwrap());
             }
             Msg::ResultsOk => (),
+            Msg::Enter() => {
+                /*self.console_service.log("Entering");
+                let mut fetch = FetchService::new();
+
+                let request = Request::get("https://gleam.io/gQeRO/animal-crossing-new-horizons-nintendo-switch-giveaway")
+                    .body(Nothing)
+                    .expect("Failed to build request");
+
+                let task = fetch.fetch_with_options(
+                    request,
+                    yew::services::fetch::FetchOptions{
+                        cache: None,
+                        credentials: None,
+                        redirect: None,
+                        mode: Some(yew::services::fetch::Mode::Cors),
+                        referrer: None,
+                        referrer_policy: None,
+                        integrity: None,
+                    },
+                    self.link.callback(move |response: Response<Result<String, Error>>| {
+                        let mut console = ConsoleService::new();
+                        if response.status().is_success() {
+                            console.log("success");
+                            console.log(&format!("{:?}", response.headers()));
+                            Msg::ResultsOk
+                        } else {
+                            Msg::Error
+                        }
+                    }),
+                );
+                self.tasks.push(task.unwrap());*/
+                //https://gleam.io/gQeRO/animal-crossing-new-horizons-nintendo-switch-giveaway
+            }
             _ => ()
 
         }
@@ -94,6 +133,7 @@ impl Component for Model {
                                 }
                             }
                             <span class="remaining_time">{"ending in "}{seconds_to_string(entry.end_date as i64 - timestamp as i64, true)}</span>
+                            
                         </div>
                     </a>
                 }
@@ -104,7 +144,7 @@ impl Component for Model {
 
         html! {
             <main>
-                <div id="results">{ for results }</div>
+                <div id="results">{ for results }/*<button onclick=self.link.callback(|_| Msg::Enter())>{"Enter"}</button>*/</div>
                 <form autocomplete="off">
                     <input type="text" name="q" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
                     <h1>{"Googleam"}</h1>
