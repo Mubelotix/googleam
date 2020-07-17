@@ -49,7 +49,7 @@ impl Component for Model {
                     .body(Nothing)
                     .expect("Failed to build request.");
                 #[cfg(not(debug_assertions))]
-                let request = Request::get(format!("https://googleam.mubelotix.dev/indexes/giveaways/search?q={}", encode(&query)))
+                let request = Request::get(format!("https://googleam.mubelotix.dev:7700/indexes/giveaways/search?q={}", encode(&query)))
                     .header("X-Meili-API-Key", "321fde49d647cb8dd3ce20f75fb3b3afcd10be5995d560d4d8151abaa57e1580")
                     .body(Nothing)
                     .expect("Failed to build request");
