@@ -54,7 +54,7 @@ impl Component for Model {
                     .body(Nothing)
                     .expect("Failed to build request");
 
-                self.is_query_empty = query.len() == 0;
+                self.is_query_empty = query.is_empty();
 
                 let results2 = Rc::clone(&self.results);
                 let task = FetchService::fetch(
