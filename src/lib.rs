@@ -111,20 +111,19 @@ impl Component for Model {
         if self.is_query_empty {
             html! {
                 <main>
-                    <form autocomplete="off" id="centered_form">
+                    <label id="centered_form">
                         <h1>{"Googleam"}</h1>
-                        <input type="text" name="q" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
-                        
-                    </form>
+                        <input autocomplete="off" type="text" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
+                    </label>
                 </main>
             }
         } else {
             html! {
                 <main>
-                    <form autocomplete="off" id="top_form">
+                    <label autocomplete="off" id="top_form">
                         <h1>{"Googleam"}</h1>
-                        <input type="text" name="q" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
-                    </form>
+                        <input autocomplete="off" type="text" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
+                    </label>
                     <div id="results">{ for results }</div>
                 </main>
             }
