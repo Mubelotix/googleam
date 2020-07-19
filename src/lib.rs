@@ -16,7 +16,6 @@ use crate::miscellaneous::*;
 
 struct Model {
     link: ComponentLink<Self>,
-    fetch_service: FetchService,
     results: Rc<RefCell<Vec<Giveaway>>>,
     is_query_empty: bool,
     tasks: Vec<FetchTask>
@@ -35,7 +34,6 @@ impl Component for Model {
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
-            fetch_service: FetchService::new(),
             results: Rc::new(RefCell::new(Vec::new())),
             is_query_empty: true,
             tasks: Vec::new()
@@ -59,7 +57,7 @@ impl Component for Model {
                 self.is_query_empty = query.len() == 0;
 
                 let results2 = Rc::clone(&self.results);
-                let task = self.fetch_service.fetch(
+                let task = FetchService::fetch(
                     request,
                     self.link.callback(move |response: Response<Result<String, Error>>| {
                         if response.status().is_success() {
@@ -131,6 +129,10 @@ impl Component for Model {
                 </main>
             }
         }
+    }
+
+    fn change(&mut self, _: Self::Properties) -> bool {
+        true
     }
 }
 
