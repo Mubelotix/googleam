@@ -18,6 +18,7 @@ struct Model {
     link: ComponentLink<Self>,
     fetch_service: FetchService,
     results: Rc<RefCell<Vec<Giveaway>>>,
+    is_query_empty: bool,
     tasks: Vec<FetchTask>
 }
 
@@ -36,6 +37,7 @@ impl Component for Model {
             link,
             fetch_service: FetchService::new(),
             results: Rc::new(RefCell::new(Vec::new())),
+            is_query_empty: true,
             tasks: Vec::new()
         }
     }
@@ -53,6 +55,8 @@ impl Component for Model {
                     .header("X-Meili-API-Key", "321fde49d647cb8dd3ce20f75fb3b3afcd10be5995d560d4d8151abaa57e1580")
                     .body(Nothing)
                     .expect("Failed to build request");
+
+                self.is_query_empty = query.len() == 0;
 
                 let results2 = Rc::clone(&self.results);
                 let task = self.fetch_service.fetch(
@@ -106,14 +110,26 @@ impl Component for Model {
             }
         });
 
-        html! {
-            <main>
-                <div id="results">{ for results }</div>
-                <form autocomplete="off">
-                    <input type="text" name="q" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
-                    <h1>{"Googleam"}</h1>
-                </form>
-            </main>
+        if self.is_query_empty {
+            html! {
+                <main>
+                    <form autocomplete="off" id="centered_form">
+                        <h1>{"Googleam"}</h1>
+                        <input type="text" name="q" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
+                        
+                    </form>
+                </main>
+            }
+        } else {
+            html! {
+                <main>
+                    <form autocomplete="off" id="top_form">
+                        <h1>{"Googleam"}</h1>
+                        <input type="text" name="q" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
+                    </form>
+                    <div id="results">{ for results }</div>
+                </main>
+            }
         }
     }
 }
