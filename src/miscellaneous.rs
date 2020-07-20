@@ -50,7 +50,7 @@ pub fn get_random_placeholder() -> &'static str {
         40 => "zelda",
         41 => "nintendo",
         42 => "sony",
-        43 => "heaset",
+        43 => "headset",
         44 => "microphone",
         45 => "sims",
         46 => "wireless",
