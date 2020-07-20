@@ -113,7 +113,7 @@ impl Component for Model {
                 <main>
                     <label id="centered_form">
                         <h1>{"Googleam"}</h1>
-                        <input autocomplete="off" type="text" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
+                        <input autocomplete="off" type="text" placeholder="Ask and you shall receive" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
                     </label>
                 </main>
             }
@@ -122,7 +122,7 @@ impl Component for Model {
                 <main>
                     <label autocomplete="off" id="top_form">
                         <h1>{"Googleam"}</h1>
-                        <input autocomplete="off" type="text" placeholder="Query" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
+                        <input autocomplete="off" type="text" placeholder="Ask and you shall receive" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
                     </label>
                     <div id="results">{ for results }</div>
                 </main>

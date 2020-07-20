@@ -18,15 +18,17 @@
 		}
 
 		#centered_form {
-			margin-top: 15vh;
+			width: 100%;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			margin-top: 50vh;
+			transform: translateY(-100%);
 		}
 
 		#centered_form>h1 {
 			font-size: 7rem;
-			margin-bottom: 2rem;
+			margin-bottom: 3rem;
 		}
 
 		#top_form {
@@ -53,13 +55,11 @@
 
 		input {
 			font-size: 1.6rem;
-			border-radius: 1rem;
+			line-height: 2.4rem;
+			border-radius: 5px;
 			border: 1px solid #dddddd;
-			padding: .3rem 1rem .3rem 1rem;
+			padding: 0 .5rem;
 			transition: .05s;
-		}
-		input::placeholder {
-			color: transparent;
 		}
 		input:focus, input:hover {
 			-webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.15);
@@ -90,8 +90,11 @@
 			margin: 0;
 		}
 
+		#results>a>p {
+			margin: .4rem 0;
+		}
+
 		#results>a>div {
-			margin-top: 5px;
 			display: flex;
 			flex-direction: row;
 		}
@@ -106,7 +109,7 @@
 		}
 
 		.remaining_time {
-			color: #c1cf00;
+			color: #cf9f00;
 		}
 		
 		@media (prefers-color-scheme: dark) {
@@ -117,27 +120,26 @@
 
 			input {
 				background-color: #333333;
-				border-color: #666666;
-				border-width: 2px;
+				border: none;
 				color: #dddddd;
 			}
 
 			#results>a {
-				color: #dddddd;
+				color: #bbc0bb;
 			}
 		}
 
 		@media all and (max-width: 800px) {
 			input {
-				width: 80vw;
+				width: 90%;
 			}
 
-			h1 {
-				font-size: 18vw;
+			#centered_form>h1 {
+				font-size: 5rem;
 			}
 
 			#centered_form {
-				margin-top: 30vh;
+				transform: translateY(-0%);
 			}
 
 			#top_form {
