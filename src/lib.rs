@@ -18,7 +18,9 @@ struct Model {
     link: ComponentLink<Self>,
     results: Rc<RefCell<Vec<Giveaway>>>,
     is_query_empty: bool,
-    tasks: Vec<FetchTask>
+    tasks: Vec<FetchTask>,
+    query: String,
+    waiting: bool,
 }
 
 enum Msg {
@@ -36,7 +38,9 @@ impl Component for Model {
             link,
             results: Rc::new(RefCell::new(Vec::new())),
             is_query_empty: true,
-            tasks: Vec::new()
+            tasks: Vec::new(),
+            query: String::new(),
+            waiting: false,
         }
     }
 
@@ -56,6 +60,7 @@ impl Component for Model {
 
                 self.is_query_empty = query.is_empty();
 
+                self.waiting = true;
                 let results2 = Rc::clone(&self.results);
                 let task = FetchService::fetch(
                     request,
@@ -71,12 +76,16 @@ impl Component for Model {
                     }),
                 );
                 self.tasks.push(task.unwrap());
-            }
-            Msg::ResultsOk => (),
-            _ => ()
 
+                let update_needed = query.len() <= 1;
+                self.query = query;
+                update_needed
+            }
+            Msg::ResultsOk | Msg::Error => {
+                self.waiting = false;
+                true
+            },
         }
-        true
     }
 
     fn view(&self) -> Html {
@@ -113,7 +122,7 @@ impl Component for Model {
                 <main>
                     <label id="centered_form">
                         <h1>{"Googleam"}</h1>
-                        <input autocomplete="off" type="text" placeholder="Ask and you shall receive" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
+                        <input autocomplete="off" type="text" placeholder=get_random_placeholder() oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
                     </label>
                 </main>
             }
@@ -122,9 +131,21 @@ impl Component for Model {
                 <main>
                     <label autocomplete="off" id="top_form">
                         <h1>{"Googleam"}</h1>
-                        <input autocomplete="off" type="text" placeholder="Ask and you shall receive" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
+                        <input autocomplete="off" type="text" oninput=self.link.callback(|data: InputData| Msg::Input(data.value))/>
                     </label>
-                    <div id="results">{ for results }</div>
+                    <div id="results">{
+                        if self.waiting || results.size_hint() != (0, Some(0)) {
+                            html! {
+                                for results
+                            }
+                        } else {
+                            html! {
+                                {
+                                    format!("There is no result for {:?}. What about \"{}\"?", self.query, get_random_placeholder())
+                                }
+                            }
+                        }
+                    }</div>
                 </main>
             }
         }
